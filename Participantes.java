@@ -20,4 +20,8 @@ class Participantes {
     public Boolean getAsistencia() {
         return asistencia;
     }
+
+    public void setAsistencia(Boolean asistencia) {
+        this.asistencia = asistencia;
+    }
 }

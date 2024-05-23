@@ -14,11 +14,11 @@ public class Arbol {
     public void verMenu() {
         int opc;
         do {
-            System.out.println("1.- Agregar Participantes\n2.- Imprimir participantes\n3.- Salir");
+            System.out.println("1.- Agregar Participantes\n2.- Registrar asistencia\n3.- Imprimir participantes\n4.- Salir");
             opc = scanner.nextInt();
             scanner.nextLine();
             validarOpc(opc);
-        } while (opc != 3);
+        } while (opc != 4);
         scanner.close();
     }
 
@@ -28,9 +28,12 @@ public class Arbol {
                 agregarParticipantes();
                 break;
             case 2:
-                imprimirParticipantes();
+                registrarAsistencia();
                 break;
             case 3:
+                imprimirParticipantes();
+                break;
+            case 4: 
                 salir();
                 break;
             default:
@@ -47,7 +50,7 @@ public class Arbol {
                 System.out.println("Error: el folio debe ser de 3 caracteres.");
             } else if (existeFolio(raiz, folio)) {
                 System.out.println("Error: el folio ya existe.");
-                folio = -1;
+                folio = -1; // Para reiniciar el ciclo
             }
         } while (folio < 100 || folio > 999);
 
@@ -56,7 +59,7 @@ public class Arbol {
         System.out.println("Ingrese su nombre:");
         String nombre = scanner.nextLine();
 
-        Participantes participante = new Participantes(folio, nombre, registrarAsistencia());
+        Participantes participante = new Participantes(folio, nombre, false);
         Nodo nuevoNodo = new Nodo(participante);
 
         if (raiz == null) {
@@ -96,7 +99,33 @@ public class Arbol {
         }
     }
 
-    public Boolean registrarAsistencia() {
+    public void registrarAsistencia() {
+        System.out.println("Ingrese el folio del participante para registrar la asistencia:");
+        int folio = scanner.nextInt();
+        scanner.nextLine();
+
+        Nodo nodo = buscarNodo(raiz, folio);
+        if (nodo != null) {
+            Boolean asistencia = obtenerAsistencia();
+            nodo.getParticipante().setAsistencia(asistencia);
+            System.out.println("Asistencia registrada para el folio: " + folio);
+        } else {
+            System.out.println("Participante con folio " + folio + " no encontrado.");
+        }
+    }
+
+    public Nodo buscarNodo(Nodo nodo, int folio) {
+        if (nodo == null || nodo.getParticipante().getFolio() == folio) {
+            return nodo;
+        }
+        if (folio < nodo.getParticipante().getFolio()) {
+            return buscarNodo(nodo.getIzq(), folio);
+        } else {
+            return buscarNodo(nodo.getDer(), folio);
+        }
+    }
+
+    public Boolean obtenerAsistencia() {
         System.out.println("Asistió\n1.- Sí\n2.- No");
         int opc = scanner.nextInt();
         scanner.nextLine();
@@ -110,7 +139,9 @@ public class Arbol {
     public void imprimirParticipantes(Nodo nodo) {
         if (nodo != null) {
             imprimirParticipantes(nodo.getIzq());
-            System.out.println("Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + ", Asistencia: " + (nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
+            System.out.println("Folio: " + nodo.getParticipante().getFolio()+
+                 ", Nombre: " + nodo.getParticipante().getNombre()+ 
+                 ", Asistencia: " +(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
             imprimirParticipantes(nodo.getDer());
         }
     }
@@ -128,7 +159,7 @@ public class Arbol {
     public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter) throws IOException {
         if (nodo != null) {
             guardarParticipantesEnArchivo(nodo.getIzq(), asistieronWriter, noAsistieronWriter);
-            String info = "Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + ", Asistencia: " + (nodo.getParticipante().getAsistencia() ? "Sí" : "No") + "\n";
+            String info = "Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + "\n";
             if (nodo.getParticipante().getAsistencia()) {
                 asistieronWriter.write(info);
             } else {
