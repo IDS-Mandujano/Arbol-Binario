@@ -16,7 +16,7 @@ public class Arbol {
         do {
             System.out.println("1.- Agregar Participantes\n2.- Imprimir participantes\n3.- Salir");
             opc = scanner.nextInt();
-            scanner.nextLine(); // Consumir la nueva línea pendiente
+            scanner.nextLine();
             validarOpc(opc);
         } while (opc != 3);
         scanner.close();
@@ -47,11 +47,11 @@ public class Arbol {
                 System.out.println("Error: el folio debe ser de 3 caracteres.");
             } else if (existeFolio(raiz, folio)) {
                 System.out.println("Error: el folio ya existe.");
-                folio = -1; // Para reiniciar el ciclo
+                folio = -1;
             }
         } while (folio < 100 || folio > 999);
 
-        scanner.nextLine(); // Consumir la nueva línea pendiente
+        scanner.nextLine();
 
         System.out.println("Ingrese su nombre:");
         String nombre = scanner.nextLine();
@@ -99,7 +99,7 @@ public class Arbol {
     public Boolean registrarAsistencia() {
         System.out.println("Asistió\n1.- Sí\n2.- No");
         int opc = scanner.nextInt();
-        scanner.nextLine(); // Consumir la nueva línea pendiente
+        scanner.nextLine();
         return opc == 1;
     }
 

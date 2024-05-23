@@ -1,2 +1,0 @@
-Folio: 654, Nombre: Mandujano, Asistencia: No
-Folio: 921, Nombre: Diego, Asistencia: No
