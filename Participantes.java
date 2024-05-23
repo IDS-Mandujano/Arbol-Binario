@@ -1,7 +1,7 @@
 class Participantes {
     private int folio;
     private String nombre;
-    private Boolean asistencia;
+    private Boolean asistencia = false;
 
     public Participantes(int folio, String nombre, Boolean asistencia) {
         this.folio = folio;

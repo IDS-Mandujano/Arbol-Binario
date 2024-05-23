@@ -17,6 +17,10 @@ public class Arbol {
             System.out.println("1.- Agregar Participantes\n2.- Registrar asistencia\n3.- Imprimir participantes\n4.- Salir");
             opc = scanner.nextInt();
             scanner.nextLine();
+            while (opc<=0||opc>4) {
+                System.out.println("Elija una opcion dentro del rango");
+                opc = scanner.nextInt();
+            }
             validarOpc(opc);
         } while (opc != 4);
         scanner.close();
@@ -36,8 +40,6 @@ public class Arbol {
             case 4: 
                 salir();
                 break;
-            default:
-                System.out.println("Opción no válida.");
         }
     }
 
@@ -156,7 +158,7 @@ public class Arbol {
         }
     }
 
-    public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter) throws IOException {
+    public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter)throws IOException{
         if (nodo != null) {
             guardarParticipantesEnArchivo(nodo.getIzq(), asistieronWriter, noAsistieronWriter);
             String info = "Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + "\n";
