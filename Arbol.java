@@ -1,17 +1,26 @@
 import java.util.Scanner;
 
 public class Arbol {
-    public void verMenu(){
-        int opc;
-        Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
+    private Nodo raiz;
 
-        do {
-            System.out.println("1.-Agregar Participantes\n2.-Imprimir participantes\n3.-Salir");
-            opc = scanner.nextInt();
-        } while (opc!=3);
+    public Arbol() {
+        scanner = new Scanner(System.in);
+        raiz = null;
     }
 
-    public void validarOpc(int opc){
+    public void verMenu() {
+        int opc;
+        do {
+            System.out.println("1.- Agregar Participantes\n2.- Imprimir participantes\n3.- Salir");
+            opc = scanner.nextInt();
+            scanner.nextLine(); // Consumir la nueva línea pendiente
+            validarOpc(opc);
+        } while (opc != 3);
+        scanner.close();
+    }
+
+    public void validarOpc(int opc) {
         switch (opc) {
             case 1:
                 agregarParticipantes();
@@ -22,49 +31,89 @@ public class Arbol {
             case 3:
                 salir();
                 break;
+            default:
+                System.out.println("Opción no válida.");
         }
     }
 
-    public void agregarParticipantes(){
-        Scanner scanner = new Scanner(System.in);
-        Nodo raiz = new Nodo();
+    public void agregarParticipantes() {
         int folio;
-        String nombre;
+        do {
+            System.out.println("Ingrese el folio (3 caracteres):");
+            folio = scanner.nextInt();
+            if (folio < 100 || folio > 999) {
+                System.out.println("Error: el folio debe ser de 3 caracteres.");
+            } else if (existeFolio(raiz, folio)) {
+                System.out.println("Error: el folio ya existe.");
+                folio = -1;
+            }
+        } while (folio < 100 || folio > 999);
 
-        System.out.println("Ingrese el folio");
-        folio = scanner.nextInt();
+        scanner.nextLine();
 
-        System.out.println("Ingrese su nombre");
-        nombre = scanner.nextLine();
+        System.out.println("Ingrese su nombre:");
+        String nombre = scanner.nextLine();
 
         Participantes participante = new Participantes(folio, nombre, registrarAsistencia());
-        raiz.setParticipante(participante);
-    }
+        Nodo nuevoNodo = new Nodo(participante);
 
-    public void crearArbol(Nodo nodo){
-        
-        
-    }
-
-    public Boolean registrarAsistencia(){
-        Scanner scanner = new Scanner(System.in);
-
-        Boolean asistencia= false ;
-        int opc;
-
-        System.out.println("Asistio\n1.-Si\n2.-No");
-        opc = scanner.nextInt();
-        if (opc==1) {
-            return asistencia = true;
+        if (raiz == null) {
+            raiz = nuevoNodo;
+        } else {
+            crearArbol(raiz, nuevoNodo);
         }
-
-        return asistencia;
     }
 
-    public void imprimirParticipantes(){
+    public boolean existeFolio(Nodo nodo, int folio) {
+        if (nodo == null) {
+            return false;
+        }
+        if (nodo.getParticipante().getFolio() == folio) {
+            return true;
+        }
+        if (folio < nodo.getParticipante().getFolio()) {
+            return existeFolio(nodo.getIzq(), folio);
+        } else {
+            return existeFolio(nodo.getDer(), folio);
+        }
     }
 
-    public void salir(){
+    public void crearArbol(Nodo actual, Nodo nuevoNodo) {
+        if (nuevoNodo.getParticipante().getFolio() < actual.getParticipante().getFolio()) {
+            if (actual.getIzq() == null) {
+                actual.setIzq(nuevoNodo);
+            } else {
+                crearArbol(actual.getIzq(), nuevoNodo);
+            }
+        } else {
+            if (actual.getDer() == null) {
+                actual.setDer(nuevoNodo);
+            } else {
+                crearArbol(actual.getDer(), nuevoNodo);
+            }
+        }
+    }
 
+    public Boolean registrarAsistencia() {
+        System.out.println("Asistió\n1.- Sí\n2.- No");
+        int opc = scanner.nextInt();
+        scanner.nextLine();
+        return opc == 1;
+    }
+
+    public void imprimirParticipantes() {
+        imprimirParticipantes(raiz);
+    }
+
+    public void imprimirParticipantes(Nodo nodo) {
+        if (nodo != null) {
+            imprimirParticipantes(nodo.getIzq());
+            System.out.println("Folio: "+nodo.getParticipante().getFolio()+", Nombre: " + nodo.getParticipante().getNombre()+", Asistencia: "+(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
+            imprimirParticipantes(nodo.getDer());
+        }
+    }
+
+    public void salir() {
+        System.out.println("Saliendo del programa.");
     }
 }

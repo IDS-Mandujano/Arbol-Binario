@@ -1,19 +1,12 @@
-public class Nodo {
-    private Participantes participante = new Participantes();
+class Nodo {
+    private Participantes participante;
     private Nodo izq;
     private Nodo der;
 
-    public Nodo(Participantes participante){
+    public Nodo(Participantes participante) {
         this.participante = participante;
-    }
-
-    public Nodo(){}
-    public Nodo getIzq() {
-        return izq;
-    }
-
-    public Nodo getDer() {
-        return der;
+        this.izq = null;
+        this.der = null;
     }
 
     public Participantes getParticipante() {
@@ -24,11 +17,19 @@ public class Nodo {
         this.participante = participante;
     }
 
-    public void setIzq(Nodo nodo) {
-        this.izq = nodo;
+    public Nodo getIzq() {
+        return izq;
     }
 
-    public void setDer(Nodo nodo) {
-        this.der = nodo;
+    public void setIzq(Nodo izq) {
+        this.izq = izq;
+    }
+
+    public Nodo getDer() {
+        return der;
+    }
+
+    public void setDer(Nodo der) {
+        this.der = der;
     }
 }
