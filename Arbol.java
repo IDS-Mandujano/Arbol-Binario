@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Arbol {
@@ -45,11 +47,11 @@ public class Arbol {
                 System.out.println("Error: el folio debe ser de 3 caracteres.");
             } else if (existeFolio(raiz, folio)) {
                 System.out.println("Error: el folio ya existe.");
-                folio = -1;
+                folio = -1; // Para reiniciar el ciclo
             }
         } while (folio < 100 || folio > 999);
 
-        scanner.nextLine();
+        scanner.nextLine(); // Consumir la nueva línea pendiente
 
         System.out.println("Ingrese su nombre:");
         String nombre = scanner.nextLine();
@@ -97,7 +99,7 @@ public class Arbol {
     public Boolean registrarAsistencia() {
         System.out.println("Asistió\n1.- Sí\n2.- No");
         int opc = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Consumir la nueva línea pendiente
         return opc == 1;
     }
 
@@ -108,12 +110,36 @@ public class Arbol {
     public void imprimirParticipantes(Nodo nodo) {
         if (nodo != null) {
             imprimirParticipantes(nodo.getIzq());
-            System.out.println("Folio: "+nodo.getParticipante().getFolio()+", Nombre: " + nodo.getParticipante().getNombre()+", Asistencia: "+(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
+            System.out.println("Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + ", Asistencia: " + (nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
             imprimirParticipantes(nodo.getDer());
         }
     }
 
+    public void guardarParticipantesEnArchivo() {
+        try (FileWriter asistieronWriter = new FileWriter("asistieron.txt");
+             FileWriter noAsistieronWriter = new FileWriter("no_asistieron.txt")) {
+            guardarParticipantesEnArchivo(raiz, asistieronWriter, noAsistieronWriter);
+            System.out.println("Información de los participantes guardada en los archivos.");
+        } catch (IOException e) {
+            System.out.println("Error al guardar la información en el archivo: " + e.getMessage());
+        }
+    }
+
+    public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter) throws IOException {
+        if (nodo != null) {
+            guardarParticipantesEnArchivo(nodo.getIzq(), asistieronWriter, noAsistieronWriter);
+            String info = "Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + ", Asistencia: " + (nodo.getParticipante().getAsistencia() ? "Sí" : "No") + "\n";
+            if (nodo.getParticipante().getAsistencia()) {
+                asistieronWriter.write(info);
+            } else {
+                noAsistieronWriter.write(info);
+            }
+            guardarParticipantesEnArchivo(nodo.getDer(), asistieronWriter, noAsistieronWriter);
+        }
+    }
+
     public void salir() {
+        guardarParticipantesEnArchivo();
         System.out.println("Saliendo del programa.");
     }
 }
