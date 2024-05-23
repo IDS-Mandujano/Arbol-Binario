@@ -139,12 +139,9 @@ public class Arbol {
     }
 
     public void imprimirParticipantes(Nodo nodo) {
+        Recorrido r = new Recorrido();
         if (nodo != null) {
-            imprimirParticipantes(nodo.getIzq());
-            System.out.println("Folio: " + nodo.getParticipante().getFolio()+
-                 ", Nombre: " + nodo.getParticipante().getNombre()+ 
-                 ", Asistencia: " +(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
-            imprimirParticipantes(nodo.getDer());
+            r.inorden(nodo);
         }
     }
 
@@ -161,7 +158,8 @@ public class Arbol {
     public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter)throws IOException{
         if (nodo != null) {
             guardarParticipantesEnArchivo(nodo.getIzq(), asistieronWriter, noAsistieronWriter);
-            String info = "Folio: " + nodo.getParticipante().getFolio() + ", Nombre: " + nodo.getParticipante().getNombre() + "\n";
+            String info = "Folio: "+nodo.getParticipante().getFolio()+
+                        ", Nombre: "+nodo.getParticipante().getNombre()+"\n";
             if (nodo.getParticipante().getAsistencia()) {
                 asistieronWriter.write(info);
             } else {

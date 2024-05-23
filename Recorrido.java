@@ -1,26 +1,32 @@
 public class Recorrido {
 
-    public void preorden(Nodo raiz){
-        if (raiz != null) {
-            System.out.println(raiz.getParticipante().getFolio());
-            preorden(raiz.getIzq());
-            preorden(raiz.getDer());
+    public void preorden(Nodo nodo){
+        if (nodo != null) {
+            System.out.println("Folio: " + nodo.getParticipante().getFolio()+
+                 ", Nombre: " + nodo.getParticipante().getNombre()+ 
+                 ", Asistencia: " +(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
+            preorden(nodo.getIzq());
+            preorden(nodo.getDer());
         }
     }
 
-    public void inorden(Nodo raiz){
-        if (raiz != null) {
-            inorden(raiz.getIzq());
-            System.out.println(raiz.getParticipante().getFolio());
-            inorden(raiz.getDer());
+    public void inorden(Nodo nodo){
+        if (nodo != null) {
+            inorden(nodo.getIzq());
+            System.out.println("Folio: " + nodo.getParticipante().getFolio()+
+                 ", Nombre: " + nodo.getParticipante().getNombre()+ 
+                 ", Asistencia: " +(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
+            inorden(nodo.getDer());
         }
     }
 
-    public void postorden(Nodo raiz){
-        if (raiz != null) {
-            postorden(raiz.getIzq());
-            postorden(raiz.getDer()); 
-            System.out.println(raiz.getParticipante().getFolio());
+    public void postorden(Nodo nodo){
+        if (nodo != null) {
+            postorden(nodo.getIzq());
+            postorden(nodo.getDer());
+            System.out.println("Folio: " + nodo.getParticipante().getFolio()+
+                 ", Nombre: " + nodo.getParticipante().getNombre()+ 
+                 ", Asistencia: " +(nodo.getParticipante().getAsistencia() ? "Sí" : "No"));
         }
     }
 }
