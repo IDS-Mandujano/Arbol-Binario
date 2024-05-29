@@ -3,16 +3,17 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Arbol {
-    private Scanner scanner;
     private Nodo raiz;
 
     public Arbol() {
+        Scanner scanner = new Scanner(System.in);
         scanner = new Scanner(System.in);
         raiz = null;
     }
 
     public void verMenu() {
         int opc;
+        Scanner scanner = new Scanner(System.in);
         do {
             System.out.println("1.- Agregar Participantes\n2.- Registrar asistencia\n3.- Imprimir participantes\n4.- Salir");
             opc = scanner.nextInt();
@@ -45,6 +46,7 @@ public class Arbol {
 
     public void agregarParticipantes() {
         int folio;
+        Scanner scanner = new Scanner(System.in);
         do {
             System.out.println("Ingrese el folio (3 caracteres):");
             folio = scanner.nextInt();
@@ -52,7 +54,7 @@ public class Arbol {
                 System.out.println("Error: el folio debe ser de 3 caracteres.");
             } else if (existeFolio(raiz, folio)) {
                 System.out.println("Error: el folio ya existe.");
-                folio = -1; // Para reiniciar el ciclo
+                folio = -1;
             }
         } while (folio < 100 || folio > 999);
 
@@ -102,6 +104,7 @@ public class Arbol {
     }
 
     public void registrarAsistencia() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese el folio del participante para registrar la asistencia:");
         int folio = scanner.nextInt();
         scanner.nextLine();
@@ -128,6 +131,7 @@ public class Arbol {
     }
 
     public Boolean obtenerAsistencia() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Asistió\n1.- Sí\n2.- No");
         int opc = scanner.nextInt();
         scanner.nextLine();
