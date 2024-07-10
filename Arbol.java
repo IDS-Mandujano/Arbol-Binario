@@ -6,8 +6,6 @@ public class Arbol {
     private Nodo raiz;
 
     public Arbol() {
-        Scanner scanner = new Scanner(System.in);
-        scanner = new Scanner(System.in);
         raiz = null;
     }
 
@@ -15,15 +13,15 @@ public class Arbol {
         int opc;
         Scanner scanner = new Scanner(System.in);
         do {
-            System.out.println("1.- Agregar Participantes\n2.- Registrar asistencia\n3.- Imprimir participantes\n4.- Salir");
+            System.out.println("1.- Agregar Participantes\n2.- Registrar asistencia\n3.- Imprimir participantes\n4.- Buscar participante\n5.- Salir");
             opc = scanner.nextInt();
             scanner.nextLine();
-            while (opc<=0||opc>4) {
-                System.out.println("Elija una opcion dentro del rango");
+            while (opc <= 0 || opc > 5) {
+                System.out.println("Elija una opción dentro del rango");
                 opc = scanner.nextInt();
             }
             validarOpc(opc);
-        } while (opc != 4);
+        } while (opc != 5);
         scanner.close();
     }
 
@@ -38,7 +36,10 @@ public class Arbol {
             case 3:
                 imprimirParticipantes();
                 break;
-            case 4: 
+            case 4:
+                buscarParticipante();
+                break;
+            case 5: 
                 salir();
                 break;
         }
@@ -149,6 +150,24 @@ public class Arbol {
         }
     }
 
+    public void buscarParticipante() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ingrese el folio del participante a buscar:");
+        int folio = scanner.nextInt();
+        scanner.nextLine();
+
+        Recorrido recorrido = new Recorrido();
+        int resultado = -1;
+
+        resultado = recorrido.inorden(raiz, folio);
+
+        if (resultado != -1) {
+            System.out.println("Participante con folio " + folio + " encontrado.");
+        } else {
+            System.out.println("Participante con folio " + folio + " no encontrado.");
+        }
+    }
+
     public void guardarParticipantesEnArchivo() {
         try (FileWriter asistieronWriter = new FileWriter("asistieron.txt");
              FileWriter noAsistieronWriter = new FileWriter("no_asistieron.txt")) {
@@ -159,11 +178,11 @@ public class Arbol {
         }
     }
 
-    public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter)throws IOException{
+    public void guardarParticipantesEnArchivo(Nodo nodo, FileWriter asistieronWriter, FileWriter noAsistieronWriter) throws IOException {
         if (nodo != null) {
             guardarParticipantesEnArchivo(nodo.getIzq(), asistieronWriter, noAsistieronWriter);
-            String info = "Folio: "+nodo.getParticipante().getFolio()+
-                        ", Nombre: "+nodo.getParticipante().getNombre()+"\n";
+            String info = "Folio: " + nodo.getParticipante().getFolio() +
+                    ", Nombre: " + nodo.getParticipante().getNombre() + "\n";
             if (nodo.getParticipante().getAsistencia()) {
                 asistieronWriter.write(info);
             } else {
